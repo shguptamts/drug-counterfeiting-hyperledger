@@ -11,7 +11,7 @@ class DrugList{
 
   /**
 	 * Adds a company model to the blockchain
-	 * @param drugKeyArray 
+	 * @param drugKeyArray
 	 * @returns {Promise<void>}
 	 */
    async addDrug(drugObj, drugKeyArray){
@@ -32,6 +32,11 @@ class DrugList{
 
    getKey(keyArray){
      return this.ctx.stub.createCompositeKey(this.name, keyArray);
+   }
+
+   async updateDrug(drugObj, drugKeyArray){
+     let compositeKey =  this.ctx.stub.createCompositeKey(this.name, drugKeyArray);
+     await this.ctx.stub.putState(compositeKey, drugObj.toBuffer());
    }
 
 
