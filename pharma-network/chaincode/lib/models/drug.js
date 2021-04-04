@@ -1,15 +1,15 @@
 'use strict';
 
-class Company {
+class Drug {
 
 
   /**
 	 * Constructor function
 	 * @param companyObj {Object}
 	 */
-  constructor(companyObj){
-    //this.key = Company.makeKey([companyObj.crn, companyObj.name]);
-    Object.assign(this, companyObj)
+  constructor(drugObj){
+    //this.key = Drug.makeKey([drugObj.name, drugObj.serialNo]);
+    Object.assign(this, drugObj)
 
   }
 
@@ -18,7 +18,7 @@ class Company {
   	 * @returns {string}
   */
   static getClass(){
-    return 'org.pharma-network.pharmanet.models.company';
+    return 'org.pharma-network.pharmanet.models.drug';
   }
 
   /**
@@ -27,7 +27,7 @@ class Company {
 	 */
    static fromBuffer(buffer){
      let json = JSON.parse( buffer.toString());
-     return new Company(json)
+     return new Drug(json)
    }
 
    /**
@@ -60,9 +60,9 @@ class Company {
 	 * @returns {Student}
 	 * @param companyObj {Object}
 	 */
-	static createInstance(companyObj) {
-		return new Company(companyObj);
+	static createInstance(drugObj) {
+		return new Drug(drugObj);
 	}
 }
 
-module.exports = Company;
+module.exports = Drug;
