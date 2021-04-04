@@ -9,6 +9,9 @@ const CompanyList = require('./lib/lists/companyList.js')
 const Drug = require('./lib/models/drug.js')
 const DrugList = require('./lib/lists/drugList.js')
 
+const PO = require('./lib/models/po.js')
+const POList = require('./lib/lists/poList.js')
+
 const orgRoleMap  = {
   'manufacturer' : 'Manufacturer',
   'distributor' : 'Distributor',
@@ -30,6 +33,7 @@ class PharmaContext extends Context {
 		// this : the context instance
     this.companyList = new CompanyList(this);
     this.drugList =  new DrugList(this);
+    this.poList = new POList(this);
   }
 
 }
@@ -110,10 +114,10 @@ class PharmaContract extends Contract {
       .catch( err =>  { throw new Error('Provided Company is not registered in blockchain.')} );
 
 
-    // Create a new composite key for the new company account
+    // Create a new composite key for the new drug
     const drugKeyArray  = [drugName, serialNo];
 
-    // Fetch company with given ID from blockchain
+    // Fetch drug with given ID from blockchain
     let existingDrugObj = await ctx.drugList
       .getDrug(drugKeyArray)
       .catch( err =>  console.log('Provided Drug name and serial number is Unique'));
@@ -137,7 +141,7 @@ class PharmaContract extends Contract {
     }
 
 
-    // Create a new instance of company model and save it to blockchain
+    // Create a new instance of drug model and save it to blockchain
     let newDrugObj =  Drug.createInstance(drugObj);
     await ctx.drugList.addDrug(newDrugObj, drugKeyArray);
 
@@ -148,6 +152,62 @@ class PharmaContract extends Contract {
     }
   }
 
+  async createPO(ctx, buyerCRN, sellerCRN, drugName, quantity){
+
+    //  This transaction should be invoked only by a distributor or retailer.
+    // if('distributorMSP' != ctx.clientIdentity.mspId && 'retailerMSP' != ctx.clientIdentity.mspId)
+    //   throw new Error('Only distributor or retailer can create PO');
+
+    // check buyer registered on the ledger
+    let buyerObj = await ctx.companyList
+      .getComapny(buyerCRN)
+      .catch( err =>  { throw new Error('Provided Buyer is not registered in blockchain.')} );
+
+    // check seller registered on the ledger
+    let sellerObj = await ctx.companyList
+      .getComapny(sellerCRN)
+      .catch( err =>  { throw new Error('Provided Seller is not registered in blockchain.')} );
+
+    // validate transfer of drug takes place in a hierarchical manner and no organisation in the middle is skipped
+    if( buyerObj.hierarchyKey - sellerObj.hierarchyKey != 1)
+      throw new Error('Invalid Purchase Order! Transfer of drug is not place in a hierarchical manner.')
+
+    // Create a new composite key for the new drug
+    const poKeyArray  = [buyerCRN, drugName];
+
+    // Fetch drug with given ID from blockchain
+    let existingPOObj = await ctx.poList
+      .getPO(poKeyArray)
+      .catch( err =>  console.log('Provided PO is Unique'));
+
+
+    if (existingPOObj !== undefined ) {
+      throw new Error('Invalid PO ID. PO with id :' + buyerCRN + '-' + drugName + ' already exists.');
+    } else {
+
+        let poCompositeKey = ctx.poList.getKey(poKeyArray);
+
+        //  Create a drug object to be stored in blockchain
+        let poObj = {
+          poID : poCompositeKey,
+          drugName : drugName,
+          quantity : quantity,
+          buyer : buyerObj.companyID,
+          seller : sellerObj.companyID
+        }
+
+        // Create a new instance of drug model and save it to blockchain
+        let newPOobj =  PO.createInstance(poObj);
+        await ctx.poList.createPO(newPOobj, poKeyArray);
+
+        // Return value of new company account created
+        console.log('Purchase Order Added!');
+        console.log(JSON.stringify(newPOobj))
+        return newPOobj;
+
+    }
+
+  }
 
 }
 
