@@ -100,12 +100,14 @@ class PharmaContract extends Contract {
 
   async addDrug(ctx, drugName, serialNo, mfgDate, expDate, companyCRN){
 
-    // TODO: validation -  This transaction should be invoked only by a manufacturer registered on the ledger.
+    //  This transaction should be invoked only by a manufacturer.
+    if('manufacturerMSP' != ctx.clientIdentity.mspId)
+      throw new Error('Only a manufacturer can register drug');
 
-    // Fetch company with given ID from blockchain
+    // This transaction should be invoked only by a manufacturer registered on the ledger
     let existingCompanyObj = await ctx.companyList
       .getComapny(companyCRN)
-      .catch( err =>  { throw new Error('Provided Company crn does not exists.')} );
+      .catch( err =>  { throw new Error('Provided Company is not registered in blockchain.')} );
 
 
     // Create a new composite key for the new company account
