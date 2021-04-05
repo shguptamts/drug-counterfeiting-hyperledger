@@ -245,7 +245,7 @@ services:
 
   chaincode:
     container_name: chaincode
-    image: hyperledger/fabric-ccenv:latest
+    image: hyperledger/fabric-ccenv:1.4.9
     tty: true
     environment:
       - GOPATH=/opt/gopath

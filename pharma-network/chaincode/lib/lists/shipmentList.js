@@ -15,7 +15,7 @@ class ShipmentList{
 	 * @returns {Promise<void>}
 	 */
    async createShipment(shipmentObj, shipmentKeyArray){
-     let compositeKey =  this.ctx.stub.createCompositeKey(this.name, shipmentKeyArray);
+     let compositeKey =  this.ctx.stub.createCompositeKey(this.name, shipmentKeyArray).replace(/\0/g, '');
      await this.ctx.stub.putState(compositeKey, shipmentObj.toBuffer());
    }
 
@@ -25,7 +25,7 @@ class ShipmentList{
 	 * @returns {Promise<Company>}
 	 */
    async getShipment(shipmentKeyArray){
-     let compositeKey =  this.ctx.stub.createCompositeKey(this.name, shipmentKeyArray);
+     let compositeKey =  this.ctx.stub.createCompositeKey(this.name, shipmentKeyArray).replace(/\0/g, '');
      let buffer =  await this.ctx.stub.getState(compositeKey);
      return Shipment.fromBuffer(buffer);
    }
@@ -35,7 +35,7 @@ class ShipmentList{
    }
 
    async updateShipment(shipmentObj, shipmentKeyArray){
-     let compositeKey =  this.ctx.stub.createCompositeKey(this.name, shipmentKeyArray);
+     let compositeKey =  this.ctx.stub.createCompositeKey(this.name, shipmentKeyArray).replace(/\0/g, '');
      await this.ctx.stub.putState(compositeKey, shipmentObj.toBuffer());
    }
 

@@ -15,7 +15,7 @@ class POList{
 	 * @returns {Promise<void>}
 	 */
    async createPO(drugObj, poKeyArray){
-     let compositeKey =  this.ctx.stub.createCompositeKey(this.name, poKeyArray);
+     let compositeKey =  this.ctx.stub.createCompositeKey(this.name, poKeyArray).replace(/\0/g, '');
      await this.ctx.stub.putState(compositeKey, drugObj.toBuffer());
    }
 
@@ -25,7 +25,7 @@ class POList{
 	 * @returns {Promise<Company>}
 	 */
    async getPO(poKeyArray){
-     let compositeKey =  this.ctx.stub.createCompositeKey(this.name, poKeyArray);
+     let compositeKey =  this.ctx.stub.createCompositeKey(this.name, poKeyArray).replace(/\0/g, '');
      let buffer =  await this.ctx.stub.getState(compositeKey);
      return PO.fromBuffer(buffer);
    }

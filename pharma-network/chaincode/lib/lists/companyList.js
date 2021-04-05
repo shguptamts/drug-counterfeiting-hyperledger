@@ -15,7 +15,7 @@ class CompanyList{
 	 * @returns {Promise<void>}
 	 */
    async registerCompany(companyObj, companyCRN){
-     let compositeKey =  this.ctx.stub.createCompositeKey(this.name, [companyCRN]);
+     let compositeKey =  this.ctx.stub.createCompositeKey(this.name, [companyCRN]).replace(/\0/g, '');
      await this.ctx.stub.putState(compositeKey, companyObj.toBuffer());
    }
 
@@ -25,7 +25,7 @@ class CompanyList{
 	 * @returns {Promise<Company>}
 	 */
    async getComapny(companyCRN){
-     let compositeKey =  this.ctx.stub.createCompositeKey(this.name, [companyCRN]);
+     let compositeKey =  this.ctx.stub.createCompositeKey(this.name, [companyCRN]).replace(/\0/g, '');
      let buffer =  await this.ctx.stub.getState(compositeKey);
      return Company.fromBuffer(buffer);
    }

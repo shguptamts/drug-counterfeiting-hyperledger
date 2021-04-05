@@ -15,7 +15,7 @@ class DrugList{
 	 * @returns {Promise<void>}
 	 */
    async addDrug(drugObj, drugKeyArray){
-     let compositeKey =  this.ctx.stub.createCompositeKey(this.name, drugKeyArray);
+     let compositeKey =  this.ctx.stub.createCompositeKey(this.name, drugKeyArray).replace(/\0/g, '');
      await this.ctx.stub.putState(compositeKey, drugObj.toBuffer());
    }
 
@@ -25,7 +25,7 @@ class DrugList{
 	 * @returns {Promise<Company>}
 	 */
    async getDrug(drugKeyArray){
-     let compositeKey =  this.ctx.stub.createCompositeKey(this.name, drugKeyArray);
+     let compositeKey =  this.ctx.stub.createCompositeKey(this.name, drugKeyArray).replace(/\0/g, '');
      let buffer =  await this.ctx.stub.getState(compositeKey);
      return Drug.fromBuffer(buffer);
    }
@@ -35,7 +35,7 @@ class DrugList{
    }
 
    async updateDrug(drugObj, drugKeyArray){
-     let compositeKey =  this.ctx.stub.createCompositeKey(this.name, drugKeyArray);
+     let compositeKey =  this.ctx.stub.createCompositeKey(this.name, drugKeyArray).replace(/\0/g, '');
      await this.ctx.stub.putState(compositeKey, drugObj.toBuffer());
    }
 
