@@ -241,7 +241,7 @@ class PharmaContract extends Contract {
           .catch( err =>  console.log('There is no corresponding PO for shipment'));
 
         // length of ‘listOfAssets’ should be exactly equal to the quantity specified in the PO
-        if( listOfAssets.length != existingPOObj.quantity)
+        if( assetsSerialNo.length != existingPOObj.quantity)
           throw new Error('Invalid parameter! List of asset is not equal to quantity specified in PO')
 
 
@@ -317,80 +317,88 @@ class PharmaContract extends Contract {
         }
   }
 
-  // async updateShipment(ctx, buyerCRN, drugName, transporterCRN){
-  //
-  //   // check buyer registered on the ledger
-  //   let buyerObj = await ctx.companyList
-  //     .getComapny(buyerCRN)
-  //     .catch( err =>  { throw new Error('Provided Buyer is not registered in blockchain.')} );
-  //
-  //   // check transporter registered on the ledger
-  //   let transporterObj = await ctx.companyList
-  //     .getComapny(transporterCRN)
-  //     .catch( err =>  { throw new Error('Provided Transporter is not registered in blockchain.')} );
-  //
-  //
-  //   // Create a new composite key for the new drug
-  //   const shipmentKeyArray  = [buyerCRN, drugName];
-  //
-  //   // Fetch drug with given ID from blockchain
-  //   let existingShipmentObj = await ctx.shipmentList
-  //     .getShipment(shipmentKeyArray)
-  //     .catch( err =>  console.log('There is no corresponding shipment'));
-  //
-  //     console.log('Existing shipment obj -'+JSON.stringify(existingShipmentObj))
-  //
-  //   if (existingShipmentObj == undefined ) {
-  //     throw new Error('Invalid shipment ID. Shipment with id :' + buyerCRN + '-' + drugName + ' does not exists.');
-  //   } else {
-  //
-  //     // TODO: validate transaction should be invoked only by the transporter of the shipment.
-  //
-  //     console.log('Existing shipment assets - ' + existingShipmentObj.assets)
-  //
-  //
-  //       existingShipmentObj.assets.split(':').forEach(async (drugCompositeKey, i) => {
-  //         let serialNo = drugCompositeKey.replace(ctx.drugList.name,'').replace(drugName,'')
-  //         let drugKeyArray = [drugName,serialNo]
-  //         console.log(drugKeyArray +' for updating owner and shipment')
-  //
-  //         //  validate IDs of the asset should be valid IDs which are registered on the network.
-  //         let existingDrugObj = await ctx.drugList
-  //           .getDrug(drugKeyArray)
-  //           .catch( err =>  console.log('Provided Drug ' + drugKeyArray + ' is not present in blockchain'));
-  //
-  //         console.log('Existing drug obj - ' + JSON.stringify(existingDrugObj))
-  //
-  //         if(existingDrugObj != undefined){
-  //
-  //           //  update owner and shipment of each drug of the batch
-  //           existingDrugObj.owner = buyerObj.companyID;
-  //           existingDrugObj.shipment = existingShipmentObj.shipmentID;
-  //
-  //           //  update drug asset in blockchain
-  //           try{
-  //             await ctx.drugList.updateDrug(existingDrugObj, drugKeyArray);
-  //             console.log('Updated drug asset' + JSON.stringify(drugObj))
-  //           }catch(err){
-  //             console.log('Error in updating drug - '+ err)
-  //           }
-  //
-  //
-  //         }else{
-  //           throw new Error('Drug ' + drugKeyArray + ' is not present in blockchain');
-  //         }
-  //       });
-  //
-  //       existingShipmentObj.status = 'delivered';
-  //       await ctx.shipmentList.updateShipment(existingShipmentObj, shipmentKeyArray)
-  //
-  //       // Return value of new company account created
-  //       console.log('Shipment Updated - status delivered!');
-  //       console.log(JSON.stringify(existingShipmentObj))
-  //       return existingShipmentObj;
-  //   }
-  //
-  // }
+  async updateShipment(ctx, buyerCRN, drugName, transporterCRN){
+
+    // check buyer registered on the ledger
+    let buyerObj = await ctx.companyList
+      .getComapny(buyerCRN)
+      .catch( err =>  { throw new Error('Provided Buyer is not registered in blockchain.')} );
+
+    // check transporter registered on the ledger
+    let transporterObj = await ctx.companyList
+      .getComapny(transporterCRN)
+      .catch( err =>  { throw new Error('Provided Transporter is not registered in blockchain.')} );
+
+
+    // Create a new composite key for the new drug
+    const shipmentKeyArray  = [buyerCRN, drugName];
+
+    // Fetch drug with given ID from blockchain
+    let existingShipmentObj = await ctx.shipmentList
+      .getShipment(shipmentKeyArray)
+      .catch( err =>  console.log('There is no corresponding shipment'));
+
+      console.log('Existing shipment obj -'+JSON.stringify(existingShipmentObj))
+
+    if (existingShipmentObj == undefined ) {
+      throw new Error('Invalid shipment ID. Shipment with id :' + buyerCRN + '-' + drugName + ' does not exists.');
+    } else {
+
+      // TODO: validate transaction should be invoked only by the transporter of the shipment.
+
+      console.log('Existing shipment assets - ' + existingShipmentObj.assets)
+
+
+        // let serialNo = existingShipmentObj.assets.split(':')[0]
+
+        // serialNo = serialNo.replace(ctx.drugList.name,'').replace(drugName,'')
+        // console.log('extracted serial no - ' + serialNo)
+        existingShipmentObj.assets.split(':').forEach(async (drugCompositeKey, i) => {
+          let serialNo = drugCompositeKey.replace(ctx.drugList.name,'').replace(drugName,'')
+        if(serialNo == "001")
+          console.log('serial number matches')
+        else
+          console.log('serial number does not matches.*******' + serialNo+'********001')
+          let drugKeyArray = [drugName,serialNo]
+          console.log(drugKeyArray +' for updating owner and shipment')
+
+          //  validate IDs of the asset should be valid IDs which are registered on the network.
+          let existingDrugObj = await ctx.drugList
+            .getDrug(drugKeyArray)
+            .catch( err =>  console.log('Provided Drug ' + drugKeyArray + ' is not present in blockchain'));
+
+          console.log('Existing drug obj - ' + JSON.stringify(existingDrugObj))
+
+          if(existingDrugObj != undefined){
+
+            //  update owner and shipment of each drug of the batch
+            existingDrugObj.owner = buyerObj.companyID;
+            existingDrugObj.shipment = existingShipmentObj.shipmentID;
+
+            //  update drug asset in blockchain
+            try{
+              await ctx.drugList.updateDrug(existingDrugObj, drugKeyArray);
+              console.log('Updated drug asset' + JSON.stringify(existingDrugObj))
+            }catch(err){
+              console.log('Error in updating drug - '+ err)
+            }
+
+
+          }else{
+            throw new Error('Drug ' + drugKeyArray + ' is not present in blockchain');
+          }
+        });
+
+        existingShipmentObj.status = 'delivered';
+        await ctx.shipmentList.updateShipment(existingShipmentObj, shipmentKeyArray)
+
+        // Return value of new company account created
+        console.log('Shipment Updated - status delivered!');
+        console.log(JSON.stringify(existingShipmentObj))
+        return existingShipmentObj;
+    }
+
+  }
 
 
 

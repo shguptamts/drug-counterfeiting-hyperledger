@@ -31,7 +31,7 @@ class ShipmentList{
    }
 
    getKey(keyArray){
-     return this.ctx.stub.createCompositeKey(this.name, keyArray);
+     return this.ctx.stub.createCompositeKey(this.name, keyArray).replace(/\0/g, '');
    }
 
    async updateShipment(shipmentObj, shipmentKeyArray){

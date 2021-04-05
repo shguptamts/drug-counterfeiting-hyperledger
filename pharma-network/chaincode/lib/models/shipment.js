@@ -25,7 +25,7 @@ class Shipment {
 	 * @param buffer {Buffer}
 	 */
    static fromBuffer(buffer){
-     let json = JSON.parse( buffer.toString());
+     let json = JSON.parse( buffer.toString('utf8').replace(/\0/g, ''));
      return new Shipment(json)
    }
 
