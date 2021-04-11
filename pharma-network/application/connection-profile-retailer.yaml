@@ -7,7 +7,7 @@ description : "Phara network"
 version : "1.0"
 
 client:
-  organisation: manufacturer
+  organisation: retailer
   connection:
     timeout:
       peer:
@@ -23,9 +23,9 @@ channels:
     peers:
       peer0.manufacturer.pharma-network.com:
         endorsingPeer: true
-        chaincodeQuery : true
+        chaincodeQuery : false
         ledgerQuery : true
-        eventSource : true
+        eventSource : false
       peer1.manufacturer.pharma-network.com:
         endorsingPeer: true
         chaincodeQuery : false
@@ -43,12 +43,12 @@ channels:
         eventSource : false
       peer0.retailer.pharma-network.com:
         endorsingPeer: true
-        chaincodeQuery : false
+        chaincodeQuery : true
         ledgerQuery : true
-        eventSource : false
+        eventSource : true
       peer1.retailer.pharma-network.com:
         endorsingPeer: true
-        chaincodeQuery : false
+        chaincodeQuery : true
         ledgerQuery : true
         eventSource : false
       peer0.consumer.pharma-network.com:
