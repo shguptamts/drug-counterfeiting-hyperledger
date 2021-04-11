@@ -20,7 +20,7 @@ networks:
 services:
 
   ca.manufacturer.pharma-network.com:
-    image: hyperledger/fabric-ca:latest
+    image: hyperledger/fabric-ca:1.4.9
     environment:
       - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
       - FABRIC_CA_SERVER_CA_NAME=ca.manufacturer.pharma-network.com
@@ -37,7 +37,7 @@ services:
       - registration
 
   ca.distributor.pharma-network.com:
-    image: hyperledger/fabric-ca:latest
+    image: hyperledger/fabric-ca:1.4.9
     environment:
       - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
       - FABRIC_CA_SERVER_CA_NAME=ca.distributor.pharma-network.com
@@ -56,7 +56,7 @@ services:
 
 
   ca.retailer.pharma-network.com:
-    image: hyperledger/fabric-ca:latest
+    image: hyperledger/fabric-ca:1.4.9
     environment:
       - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
       - FABRIC_CA_SERVER_CA_NAME=ca.retailer.pharma-network.com
@@ -73,7 +73,7 @@ services:
       - registration
 
   ca.consumer.pharma-network.com:
-    image: hyperledger/fabric-ca:latest
+    image: hyperledger/fabric-ca:1.4.9
     environment:
       - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
       - FABRIC_CA_SERVER_CA_NAME=ca.consumer.pharma-network.com
@@ -90,7 +90,7 @@ services:
       - registration
 
   ca.transporter.pharma-network.com:
-    image: hyperledger/fabric-ca:latest
+    image: hyperledger/fabric-ca:1.4.9
     environment:
       - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
       - FABRIC_CA_SERVER_CA_NAME=ca.transporter.pharma-network.com
@@ -199,7 +199,7 @@ services:
 
   cli:
     container_name: cli
-    image: hyperledger/fabric-tools:latest
+    image: hyperledger/fabric-tools:1.4.9
     tty: true
     stdin_open: true
     environment:

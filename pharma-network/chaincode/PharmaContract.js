@@ -404,9 +404,9 @@ class PharmaContract extends Contract {
 
   async retailDrug (ctx, drugName, serialNo, retailerCRN, customerAadhar){
 
-    //  This transaction should be invoked only by a manufacturer.
+    //  This transaction should be invoked only by a retailer.
     // if('retailerMSP' != ctx.clientIdentity.mspId)
-    //   throw new Error('Only a manufacturer can register drug');
+    //   throw new Error('Only a retailer can sell drug');
 
     // This transaction should be invoked only by a manufacturer registered on the ledger
     let existingRetailerObj = await ctx.companyList
