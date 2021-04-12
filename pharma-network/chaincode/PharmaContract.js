@@ -159,8 +159,8 @@ class PharmaContract extends Contract {
   async createPO(ctx, buyerCRN, sellerCRN, drugName, quantity){
 
     //  This transaction should be invoked only by a distributor or retailer.
-    // if('distributorMSP' != ctx.clientIdentity.mspId && 'retailerMSP' != ctx.clientIdentity.mspId)
-    //   throw new Error('Only distributor or retailer can create PO');
+    if('distributorMSP' != ctx.clientIdentity.mspId && 'retailerMSP' != ctx.clientIdentity.mspId)
+      throw new Error('Only distributor or retailer can create PO');
 
     // check buyer registered on the ledger
     let buyerObj = await ctx.companyList
@@ -214,6 +214,10 @@ class PharmaContract extends Contract {
   }
 
   async createShipment(ctx, buyerCRN, drugName, listOfAssets, transporterCRN ){
+
+    //  This transaction should be invoked only by a manufacturer or a distributor
+    if('manufacturerMSP' != ctx.clientIdentity.mspId && 'distributorMSP' != ctx.clientIdentity.mspId)
+      throw new Error('Only manufacturer or distributor  can create Shipment');
 
       let assetsSerialNo = listOfAssets.substring(1, listOfAssets.length -1).split(',');
 
@@ -313,6 +317,10 @@ class PharmaContract extends Contract {
 
   async updateShipment(ctx, buyerCRN, drugName, transporterCRN){
 
+    //  This transaction should be invoked only by a transporter
+    if('transporterMSP' != ctx.clientIdentity.mspId )
+      throw new Error('Only transporter can update shipment');
+
     // check buyer registered on the ledger
     let buyerObj = await ctx.companyList
       .getComapny(buyerCRN)
@@ -394,9 +402,9 @@ class PharmaContract extends Contract {
 
   async retailDrug (ctx, drugName, serialNo, retailerCRN, customerAadhar){
 
-    //  This transaction should be invoked only by a retailer.
-    // if('retailerMSP' != ctx.clientIdentity.mspId)
-    //   throw new Error('Only a retailer can sell drug');
+    // This transaction should be invoked only by a retailer.
+    if('retailerMSP' != ctx.clientIdentity.mspId)
+      throw new Error('Only a retailer can sell drug');
 
     // This transaction should be invoked only by a manufacturer registered on the ledger
     let existingRetailerObj = await ctx.companyList

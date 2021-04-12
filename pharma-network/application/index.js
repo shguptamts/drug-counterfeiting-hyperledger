@@ -16,7 +16,6 @@ const retailDrug = require('./7_retailDrug.js')
 const viewHistory = require('./8_viewHistory.js')
 const viewDrugCurrentState = require('./9_viewDrugCurrentState.js')
 
-const test = require('./test.js')
 
 
 //  define express app settings
@@ -30,26 +29,7 @@ app.set('title', 'Pharma Net app')
 
 app.get('/', (req,res) => res.send('hello world'))
 
-app.get('/test', (req, res) => {
-  test.execute()
-    .then((files) => {
-      console.log('files are : ')
-      const result = {
-        status : 'success',
-        files : files
-      };
-      res.json(result)
-    })
-    .catch((e) =>{
-      const result = {
-        status : 'error',
-        error : e
-      };
-      res.status(500).send(result)
-    })
-});
-
-//  dummy post api call
+// api calls
 
 app.get('/addToWallet', (req, res) => {
   addToWallet.execute()
