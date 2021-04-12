@@ -6,11 +6,11 @@ const {FileSystemWallet, Gateway } = require('fabric-network')
 const helper = require('./helper.js')
 let gateway
 
-async function main(org, companyCRN, companyName, location, organisationRole){
+async function main(companyCRN, companyName, location, organisationRole){
 
   try{
 
-    const pharmanetContract = await helper.getContractInstnace(org);
+    const pharmanetContract = await helper.getContractInstnace(organisationRole);
 
     console.log('..... Register a company')
     const companyBuffer = await pharmanetContract.submitTransaction('registerCompany', companyCRN, companyName, location, organisationRole)
@@ -28,11 +28,11 @@ async function main(org, companyCRN, companyName, location, organisationRole){
 
 }
 
-
-main("manufacturer","MAN008","Sun Pharma", "chennai", "manufacturer").then(() => {
-  console.log('Company registered')
-}).catch(() => {
-  console.log("Error while invoking register company")
-})
+//
+// main("manufacturer","MAN008","Sun Pharma", "chennai", "manufacturer").then(() => {
+//   console.log('Company registered')
+// }).catch(() => {
+//   console.log("Error while invoking register company")
+// })
 
 module.exports.execute = main

@@ -29,11 +29,11 @@ async function main(org, drugName, serialNo){
 }
 
 
-main("consumer","Paracetamol", "001").then(() => {
-  console.log('Drug History viewed')
-}).catch((e) => {
-  console.log("Error while viewing drug history")
-  console.log(e)
-})
+// main("consumer","Paracetamol", "001").then(() => {
+//   console.log('Drug History viewed')
+// }).catch((e) => {
+//   console.log("Error while viewing drug history")
+//   console.log(e)
+// })
 
 module.exports.execute = main

@@ -6,11 +6,11 @@ const {FileSystemWallet, Gateway } = require('fabric-network')
 const helper = require('./helper.js')
 let gateway
 
-async function main(org, drugName, serialNo, mfgDate, expDate, companyCRN){
+async function main( drugName, serialNo, mfgDate, expDate, companyCRN){
 
   try{
 
-    const pharmanetContract = await helper.getContractInstnace(org);
+    const pharmanetContract = await helper.getContractInstnace('manufacturer');
 
     console.log('..... Add a Drug')
     const drugBuffer = await pharmanetContract.submitTransaction('addDrug', drugName, serialNo, mfgDate, expDate, companyCRN)
@@ -29,11 +29,11 @@ async function main(org, drugName, serialNo, mfgDate, expDate, companyCRN){
 }
 
 
-main("manufacturer","Paracetamol","001", "04-21", "04-22", "MAN001").then(() => {
-  console.log('Drug registered')
-}).catch((e) => {
-  console.log("Error while adding drug")
-  console.log(e)
-})
+// main("Paracetamol","001", "04-21", "04-22", "MAN001").then(() => {
+//   console.log('Drug registered')
+// }).catch((e) => {
+//   console.log("Error while adding drug")
+//   console.log(e)
+// })
 
 module.exports.execute = main

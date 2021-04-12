@@ -29,11 +29,11 @@ async function main(org, buyerCRN, sellerCRN, drugName, quantity){
 }
 
 
-main("distributor","DIST001","MAN001", "Paracetamol", "3").then(() => {
-  console.log('PO registered')
-}).catch((e) => {
-  console.log("Error while creating PO")
-  console.log(e)
-})
+// main("distributor","DIST001","MAN001", "Paracetamol", "3").then(() => {
+//   console.log('PO registered')
+// }).catch((e) => {
+//   console.log("Error while creating PO")
+//   console.log(e)
+// })
 
 module.exports.execute = main

@@ -29,11 +29,11 @@ async function main(org, drugName, serialNo, retailerCRN, customerAadhar){
 }
 
 
-main("retailer","Paracetamol", "001", "RET002",  "AAD001").then(() => {
-  console.log('Drug selled')
-}).catch((e) => {
-  console.log("Error while selling Drug")
-  console.log(e)
-})
+// main("retailer","Paracetamol", "001", "RET002",  "AAD001").then(() => {
+//   console.log('Drug selled')
+// }).catch((e) => {
+//   console.log("Error while selling Drug")
+//   console.log(e)
+// })
 
 module.exports.execute = main

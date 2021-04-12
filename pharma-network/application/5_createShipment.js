@@ -17,6 +17,7 @@ async function main(org, buyerCRN, drugName, listOfAssets, transporterCRN){
     console.log('..... Create shipment transacton submitted')
     console.log('..... Processing shipment creation Transaction response \n\n')
     let newShipment = JSON.parse(shipmentBuffer.toString())
+    newShipment.assets = newShipment.assets.split(':')
     console.log(newShipment)
     console.log('\n\n..... Transaction Complete!')
     return newShipment
@@ -29,11 +30,11 @@ async function main(org, buyerCRN, drugName, listOfAssets, transporterCRN){
 }
 
 
-main("manufacturer","DIST001","Paracetamol", "[001,002,003]",  "TRA001").then(() => {
-  console.log('Shipment registered')
-}).catch((e) => {
-  console.log("Error while creating PO")
-  console.log(e)
-})
+// main("manufacturer","DIST001","Paracetamol", "[001,002,003]",  "TRA001").then(() => {
+//   console.log('Shipment registered')
+// }).catch((e) => {
+//   console.log("Error while creating PO")
+//   console.log(e)
+// })
 
 module.exports.execute = main

@@ -129,6 +129,7 @@ function networkUp() {
     generateCerts
     replacePrivateKey
     generateChannelArtifacts
+    echo "In network up !!!! generating artifacts"
   fi
   # Start the docker containers using compose file
   IMAGE_TAG=$IMAGETAG docker-compose -f "$COMPOSE_FILE" up -d 2>&1
@@ -183,7 +184,7 @@ function networkDown() {
     #Cleanup images
     removeUnwantedImages
     # remove orderer block and other channel configuration transactions and certs
-    rm -rf channel-artifacts/*.block channel-artifacts/*.tx crypto-config
+    #rm -rf channel-artifacts/*.block channel-artifacts/*.tx crypto-config
   fi
 }
 

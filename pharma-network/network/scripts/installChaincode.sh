@@ -55,8 +55,8 @@ for org in $ORGS; do
 done
 
 # Instantiate chaincode on the channel using peer0.registrar
-echo "Instantiating chaincode on channel using peer0.manufacturer.pharma-network.com ..."
-instantiateChaincode 0 'manufacturer' $VERSION
+echo "Instantiating chaincode on channel using peer${peer}.${org}.pharma-network.com ..."
+instantiateChaincode 0 'distributor' $VERSION
 
 echo
 echo "========= All GOOD, Chaincode PHARMANET Is Now Installed & Instantiated On Pharma Network =========== "

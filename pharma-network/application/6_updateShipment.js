@@ -29,11 +29,11 @@ async function main(org, buyerCRN, drugName, transporterCRN){
 }
 
 
-main("transporter","DIST001","Paracetamol",  "TRA001").then(() => {
-  console.log('Shipment Updated')
-}).catch((e) => {
-  console.log("Error while updating Shipment")
-  console.log(e)
-})
+// main("transporter","DIST001","Paracetamol",  "TRA001").then(() => {
+//   console.log('Shipment Updated')
+// }).catch((e) => {
+//   console.log("Error while updating Shipment")
+//   console.log(e)
+// })
 
 module.exports.execute = main

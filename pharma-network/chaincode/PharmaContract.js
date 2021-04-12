@@ -249,6 +249,7 @@ class PharmaContract extends Contract {
           throw new Error('Invalid PO ID. PO with id :' + buyerCRN + '-' + drugName + ' does not exists for corresponding shipment.');
         } else {
 
+          //  update owner of drugs in consingment
           for(let i=0; i< assetsSerialNo.length; ++i){
 
             let serialNo = assetsSerialNo[i]
@@ -289,8 +290,6 @@ class PharmaContract extends Contract {
 
             let shipmentCompositeKey = ctx.shipmentList.getKey(poKeyArray);
 
-            //console.log(assetsCompositeKey+ '   Assest after join'+ assetsCompositeKey)
-
             //  Create a drug object to be stored in blockchain
             let shipmentObj = {
               shipmentID : shipmentCompositeKey,
@@ -304,22 +303,9 @@ class PharmaContract extends Contract {
             let newShipmentObj =  Shipment.createInstance(shipmentObj);
             await ctx.shipmentList.createShipment(newShipmentObj, poKeyArray);
 
-            // Return value of new company account created
+            // Return value of new shipment created
             console.log('Shipment Added!');
             console.log(JSON.stringify(newShipmentObj))
-
-            //  update owner of drugs in consingment
-
-            // assets.forEach(async (existingDrugObj, i) => {
-            //   try{
-            //
-            //     await ctx.drugList.updateDrug(existingDrugObj, [drugName,listOfAssets[i]]);
-            //     console.log('Updated drug obj '+JSON.stringify(existingDrugObj))
-            //   }catch(error){
-            //     console.log('Error in updating drug - ' + error)
-            //   }
-            // });
-
             return newShipmentObj;
 
         }
@@ -352,15 +338,14 @@ class PharmaContract extends Contract {
       throw new Error('Invalid shipment ID. Shipment with id :' + buyerCRN + '-' + drugName + ' does not exists.');
     } else {
 
-      // TODO: validate transaction should be invoked only by the transporter of the shipment.
+      //  validate transaction should be invoked only by the transporter of the shipment.
       if(transporterObj.companyID != existingShipmentObj.transporter)
         throw new Error('Invalid operation! only transporter of the shipment can invoke this operation')
 
       console.log('Existing shipment assets - ' + existingShipmentObj.assets)
 
-
-      //  existingShipmentObj.assets.split(':').forEach(async (drugCompositeKey, i) => {
-
+      // update owner and shipment id of drug assets related to shipment
+      let drugAssetArray = []
       let assets = existingShipmentObj.assets.split(':');
       for(let i=0; i< assets.length ; ++i){
         let drugCompositeKey = assets[i];
@@ -381,6 +366,9 @@ class PharmaContract extends Contract {
           existingDrugObj.owner = buyerObj.companyID;
           existingDrugObj.shipment = existingShipmentObj.shipmentID;
 
+          // adding to represent drug asset in response
+          drugAssetArray.push(existingDrugObj)
+
           //  update drug asset in blockchain
           try{
             await ctx.drugList.updateDrug(existingDrugObj, drugKeyArray);
@@ -396,6 +384,8 @@ class PharmaContract extends Contract {
 
         // Return value of new company account created
         console.log('Shipment Updated - status delivered!');
+
+        existingShipmentObj.assets = drugAssetArray
         console.log(JSON.stringify(existingShipmentObj))
         return existingShipmentObj;
     }

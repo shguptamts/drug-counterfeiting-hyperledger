@@ -29,11 +29,11 @@ async function main(org, drugName, serialNo){
 }
 
 
-main("consumer","Paracetamol", "001").then(() => {
-  console.log('Drug current state  viewed')
-}).catch((e) => {
-  console.log("Error while viewing drug current state")
-  console.log(e)
-})
+// main("consumer","Paracetamol", "001").then(() => {
+//   console.log('Drug current state  viewed')
+// }).catch((e) => {
+//   console.log("Error while viewing drug current state")
+//   console.log(e)
+// })
 
 module.exports.execute = main
